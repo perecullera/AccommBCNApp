@@ -62,7 +62,7 @@ public class AptContract {
         //columns
         public static final String COLUMN_NAME = "name";
 
-        public static Uri buildWeatherUri(long id) {
+        public static Uri buildAptUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
