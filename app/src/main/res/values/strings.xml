@@ -5,4 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">com.perecullera.aptapp</string>
+    <string name="content_authority">com.perecullera.aptapp</string>
+
 </resources>

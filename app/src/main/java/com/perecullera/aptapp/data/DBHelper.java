@@ -26,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
         final String SQL_CREATE_APARTMENT_TABLE = "CREATE TABLE " + ApartmentEntry.TABLE_NAME + " (" +
                 ApartmentEntry._ID + " INTEGER PRIMARY KEY," +
-                ApartmentEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
+                ApartmentEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ApartmentEntry.COLUMN_ADDRESS + " TEXT , " +
                 ApartmentEntry.COLUMN_NEIGHBORHOOD + " TEXT, " +
                 ApartmentEntry.COLUMN_DISTRICT + " TEXT, "+
