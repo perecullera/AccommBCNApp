@@ -2,7 +2,6 @@ package com.perecullera.aptapp;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,60 +18,31 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.TextView;
 
-import com.perecullera.aptapp.Sync.AptSyncAdapter;
 import com.perecullera.aptapp.data.AptContract;
 
-public class MainActivity extends AppCompatActivity
+public class DetailActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private AptAdapter mAptAdapter;
     private static final int APARTMENT_LOADER = 0;
-    public final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int COL_APT_NAME = 2;
+    int apt_id;
 
-    static final int COL_APT_ID = 0;
+    TextView mTextView;
+
+    public final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //cursor adapter
-        // The CursorAdapter will take data from our cursor and populate the ListView.
-
-        mAptAdapter = new AptAdapter(this, null, 0);
-
-        getLoaderManager().initLoader(APARTMENT_LOADER, null, this);
-        //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) findViewById(R.id.listview_apartment);
-        listView.setAdapter(mAptAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null) {
-                    int apt_id = cursor.getInt(COL_APT_ID);
-                    Intent intent = new Intent(MainActivity.this, DetailActivity.class)
-                            .putExtra("id" ,apt_id);
-                    startActivity(intent);
-                }
-            }
-        });
-
-
-        /*//Dummy debug
-        DBHelper db = new DBHelper(this);
-        db.onUpgrade(db.getWritableDatabase(), 0, 0); //fake db version
-        AptSyncAdapter.syncImmediately(this);
-*/
-
-        AptSyncAdapter.initializeSyncAdapter(this);
+        mTextView = (TextView) findViewById(R.id.detail_text_view);
+        apt_id = getIntent().getIntExtra("id", 0);
+        Log.d(LOG_TAG, "Extra id =  " + apt_id );
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +53,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        getLoaderManager().initLoader(APARTMENT_LOADER, null, this);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -91,7 +63,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -107,7 +78,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.detail, menu);
         return true;
     }
 
@@ -153,26 +124,30 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Sort order:  Ascending, by date
         Uri AptUri = AptContract.ApartmentEntry.CONTENT_URI;
         Log.d(LOG_TAG, "Loader created with uri " + AptUri);
-
+        String selection = AptContract.ApartmentEntry._ID + "= ? ";
         return new CursorLoader(this,
                 AptUri,
                 null,
-                null,
-                null,
+                selection,
+                new String[]{ Integer.toString(apt_id)},
                 null);
+
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mAptAdapter.swapCursor(cursor);
-        Log.d(LOG_TAG, "Loader finished " + cursor + "count: "+  cursor.getCount());
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(LOG_TAG, "Loader returns cursor: " + data.getCount());
+        if (data != null && data.moveToFirst()) {
+            String text = data.getString(COL_APT_NAME);
+            Log.d(LOG_TAG, "Loader set text to " + text);
+            mTextView.setText(text);
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
-        mAptAdapter.swapCursor(null);
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

@@ -9,5 +9,6 @@
     <!-- SyncAdapter related -->
     <string name="sync_account_type">com.perecullera.aptapp</string>
     <string name="content_authority">com.perecullera.aptapp</string>
+    <string name="title_activity_detail">DetailActivity</string>
 
 </resources>

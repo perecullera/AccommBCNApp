@@ -96,6 +96,7 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // These are the names of the JSON objects that need to be extracted.
             final String APTname = "name";
+            final String APTid = "id_2";
             final String APTaddress = "address";
             final String APTneigh = "neighborhood";
             final String APTdistrict = "district";
@@ -118,6 +119,7 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
                     String name;
                     String address;
                     String neighborhood;
+                    String id_2;
                     String district;
                     String postal_code;
                     String cats;
@@ -127,6 +129,7 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     JSONObject aptJSON = aptArray.getJSONObject(i);
                     name = aptJSON.getString(APTname);
+                    id_2 = aptJSON.getString(APTid);
                     address = aptJSON.getString(APTaddress);
                     neighborhood = aptJSON.getString(APTneigh);
                     district = aptJSON.getString(APTdistrict);
@@ -138,6 +141,7 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     ContentValues aptValues = new ContentValues();
                     aptValues.put(ApartmentEntry.COLUMN_NAME, name);
+                    aptValues.put(ApartmentEntry.COLUMN_ID, id_2);
                     aptValues.put(ApartmentEntry.COLUMN_NEIGHBORHOOD, neighborhood);
                     aptValues.put(ApartmentEntry.COLUMN_ADDRESS, address);
 

@@ -32,6 +32,7 @@ public class AptContract {
 
         //columns
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_NEIGHBORHOOD = "neighborhood";
         public static final String COLUMN_DISTRICT = "district";
         public static final String COLUMN_CREATED = "created";
@@ -45,6 +46,8 @@ public class AptContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
+
+
 
     /* Inner class that defines the table contents of the cats table */
     public static final class CatsEntry implements BaseColumns {
