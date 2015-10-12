@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.perecullera.aptapp.R;
+import com.perecullera.aptapp.data.DBHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -146,9 +147,12 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
                 if ( cVVector.size() > 0 ) {
                     ContentValues[] cvArray = new ContentValues[cVVector.size()];
                     cVVector.toArray(cvArray);
+                    DBHelper db = new DBHelper(mContext);
+                    //we delete old apartment from the database
+                    db.onUpgrade(db.getWritableDatabase(), 0, 0);
                     mContext.getContentResolver().bulkInsert(ApartmentEntry.CONTENT_URI, cvArray);
                 }
-                Log.d(LOG_TAG, "Fetc Apartments Complete. " + cVVector.size() + " Inserted");
+                Log.d(LOG_TAG, "Fetch Apartments Complete. " + cVVector.size() + " Inserted");
 
 
             }catch (Exception e){

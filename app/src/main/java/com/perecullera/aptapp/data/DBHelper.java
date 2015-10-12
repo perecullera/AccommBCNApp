@@ -3,6 +3,7 @@ package com.perecullera.aptapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.perecullera.aptapp.data.AptContract.ApartmentEntry;
 
@@ -15,6 +16,8 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION = 1;
 
     public static final String DATABASE_NAME = "apt.db";
+
+    public final String LOG_TAG = DBHelper.class.getSimpleName();
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,6 +48,7 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + ApartmentEntry.TABLE_NAME);
+        Log.d(LOG_TAG, " Dropped Table");
         onCreate(db);
     }
 }

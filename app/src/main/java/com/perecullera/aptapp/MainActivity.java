@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.perecullera.aptapp.Sync.AptSyncAdapter;
 import com.perecullera.aptapp.data.AptContract;
 
 public class MainActivity extends AppCompatActivity
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         AptSyncAdapter.syncImmediately(this);
 */
 
-        //AptSyncAdapter.initializeSyncAdapter(this);
+        AptSyncAdapter.initializeSyncAdapter(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
