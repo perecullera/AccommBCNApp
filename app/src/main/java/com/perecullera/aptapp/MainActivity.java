@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
         AptSyncAdapter.syncImmediately(this);
 */
 
+        //AptSyncAdapter.initializeSyncAdapter(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

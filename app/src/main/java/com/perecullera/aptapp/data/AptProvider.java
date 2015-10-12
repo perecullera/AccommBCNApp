@@ -19,7 +19,7 @@ public class AptProvider extends ContentProvider {
     private DBHelper mDBHelper;
 
     private static final int APARTMENT = 100;
-    private static final int APARTMENT_WITH_LOCATION = 101;
+    private static final int APARTMENT_DETAIL = 101;
     private static final int APARTMENT_WITH_LOCATION_AND_DISTRICT = 102;
     /* private static final int LOCATION = 300;
     private static final int LOCATION_ID = 301;
@@ -31,7 +31,7 @@ public class AptProvider extends ContentProvider {
        final String authority = AptContract.CONTENT_AUTHORITY;
 
        matcher.addURI(authority, AptContract.PATH_AP, APARTMENT);
-       matcher.addURI(authority, AptContract.PATH_AP, APARTMENT_WITH_LOCATION);
+       matcher.addURI(authority, AptContract.PATH_AP + "/*", APARTMENT_DETAIL);
        matcher.addURI(authority, AptContract.PATH_AP, APARTMENT_WITH_LOCATION_AND_DISTRICT);
 
        return matcher;
@@ -104,6 +104,7 @@ public class AptProvider extends ContentProvider {
     }
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
+        Cursor retCursor;
         final SQLiteDatabase db = mDBHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -123,6 +124,7 @@ public class AptProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
+
             default:
                 return super.bulkInsert(uri, values);
         }
