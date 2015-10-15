@@ -1,11 +1,6 @@
 package com.perecullera.aptapp;
 
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,18 +10,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.perecullera.aptapp.Sync.AptSyncAdapter;
-import com.perecullera.aptapp.data.AptContract;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private AptAdapter mAptAdapter;
     private static final int APARTMENT_LOADER = 0;
@@ -44,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         //cursor adapter
         // The CursorAdapter will take data from our cursor and populate the ListView.
 
-        mAptAdapter = new AptAdapter(this, null, 0);
+      /*  mAptAdapter = new AptAdapter(this, null, 0);
 
         getLoaderManager().initLoader(APARTMENT_LOADER, null, this);
         //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -63,7 +54,7 @@ public class MainActivity extends AppCompatActivity
                     startActivity(intent);
                 }
             }
-        });
+        });*/
 
 
         /*//Dummy debug
@@ -71,6 +62,8 @@ public class MainActivity extends AppCompatActivity
         db.onUpgrade(db.getWritableDatabase(), 0, 0); //fake db version
         AptSyncAdapter.syncImmediately(this);
 */
+        AptList_Fragment forecastFragment =  (AptList_Fragment)getFragmentManager()
+                .findFragmentById(R.id.fragment_aptlist);
 
         AptSyncAdapter.initializeSyncAdapter(this);
 
@@ -155,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
+    /*@Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Sort order:  Ascending, by date
         Uri AptUri = AptContract.ApartmentEntry.CONTENT_URI;
@@ -178,5 +171,5 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader loader) {
         mAptAdapter.swapCursor(null);
-    }
+    }*/
 }
