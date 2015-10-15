@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
                 if (cursor != null) {
                     int apt_id = cursor.getInt(COL_APT_ID);
                     Intent intent = new Intent(MainActivity.this, DetailActivity.class)
-                            .putExtra("id" ,apt_id);
+                            .putExtra("id", apt_id);
                     startActivity(intent);
                 }
             }
@@ -78,8 +78,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //TODO
+                Cursor c = mAptAdapter.getCursor();
+                if (c.moveToFirst()) {
+                    Snackbar.make(view, c.getString(COL_APT_ID), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
