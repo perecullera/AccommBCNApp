@@ -1,10 +1,9 @@
 package com.perecullera.aptapp;
 
-import android.database.Cursor;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         AptSyncAdapter.syncImmediately(this);
 */
         AptList_Fragment forecastFragment =  (AptList_Fragment)getFragmentManager()
-                .findFragmentById(R.id.fragment_aptlist);
+                .findFragmentById(R.id.fragment_container);
 
         AptSyncAdapter.initializeSyncAdapter(this);
 
@@ -71,12 +70,16 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
-                Cursor c = mAptAdapter.getCursor();
-                if (c.moveToFirst()) {
-                    Snackbar.make(view, c.getString(COL_APT_ID), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
+                Map_Fragment forecastFragment = new Map_Fragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.fragment_container, forecastFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
             }
         });
 
@@ -147,29 +150,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    /*@Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Sort order:  Ascending, by date
-        Uri AptUri = AptContract.ApartmentEntry.CONTENT_URI;
-        Log.d(LOG_TAG, "Loader created with uri " + AptUri);
-
-        return new CursorLoader(this,
-                AptUri,
-                null,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mAptAdapter.swapCursor(cursor);
-        Log.d(LOG_TAG, "Loader finished " + cursor + "count: "+  cursor.getCount());
-    }
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-        mAptAdapter.swapCursor(null);
-    }*/
 }

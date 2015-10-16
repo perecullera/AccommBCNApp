@@ -3,9 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.perecullera.aptapp.AptList_Fragment">
-    <ListView
-        android:id="@+id/listview_apt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null" />
+
+
+
+        <ListView
+            android:id="@+id/listview_apt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null" />
+
+
 </FrameLayout>
