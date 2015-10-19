@@ -139,11 +139,16 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
                     longitude = aptJSON.getString(APTlongitude);
                     created = aptJSON.getString(APTcreated);
 
+                    Log.d(LOG_TAG, "Latitude saved " + latitude);
+                    Log.d(LOG_TAG, "Longitude saved " + longitude);
+
                     ContentValues aptValues = new ContentValues();
                     aptValues.put(ApartmentEntry.COLUMN_NAME, name);
                     aptValues.put(ApartmentEntry.COLUMN_ID, id_2);
                     aptValues.put(ApartmentEntry.COLUMN_NEIGHBORHOOD, neighborhood);
                     aptValues.put(ApartmentEntry.COLUMN_ADDRESS, address);
+                    aptValues.put(ApartmentEntry.COLUMN_LATITUDE,latitude);
+                    aptValues.put(ApartmentEntry.COLUMN_LONGITUDE, longitude);
 
                     cVVector.add(aptValues);
 

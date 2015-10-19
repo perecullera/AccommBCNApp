@@ -21,7 +21,7 @@ public class AptProvider extends ContentProvider {
 
     private static final int APARTMENT = 100;
     private static final int APARTMENT_DETAIL = 101;
-    private static final int APARTMENT_WITH_LOCATION_AND_DISTRICT = 102;
+    private static final int APARTMENTS_WITH_LOCATION = 102;
     /* private static final int LOCATION = 300;
     private static final int LOCATION_ID = 301;
     */
@@ -33,7 +33,7 @@ public class AptProvider extends ContentProvider {
 
        matcher.addURI(authority, AptContract.PATH_AP, APARTMENT);
        matcher.addURI(authority, AptContract.PATH_AP + "/*", APARTMENT_DETAIL);
-       matcher.addURI(authority, AptContract.PATH_AP, APARTMENT_WITH_LOCATION_AND_DISTRICT);
+       matcher.addURI(authority, AptContract.PATH_AP, APARTMENTS_WITH_LOCATION);
 
        return matcher;
    }

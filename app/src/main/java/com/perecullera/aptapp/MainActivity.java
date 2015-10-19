@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Commit the transaction
                 transaction.commit();
+                view.setBackgroundResource(R.drawable.ic_menu_mapmode);
             }
         });
 

@@ -2,55 +2,35 @@ package com.perecullera.aptapp;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.perecullera.aptapp.data.AptContract;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Map_Fragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Map_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Map_Fragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class Map_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private int MAP_LOADER = 0;
 
     private GoogleMap map;
 
-    private OnFragmentInteractionListener mListener;
+    private static final String LOG_TAG = Map_Fragment.class.getSimpleName();
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Map_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Map_Fragment newInstance(String param1, String param2) {
-        Map_Fragment fragment = new Map_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    Context context;
 
     public Map_Fragment() {
         // Required empty public constructor
@@ -59,10 +39,9 @@ public class Map_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        getLoaderManager().initLoader(MAP_LOADER, null, this);
+
+
     }
 
     @Override
@@ -79,14 +58,14 @@ public class Map_Fragment extends Fragment {
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        context = activity;
+        getLoaderManager().initLoader(MAP_LOADER, null, this);
         /*try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -98,22 +77,47 @@ public class Map_Fragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Sort order:  Ascending, by date
+        Uri AptUri = AptContract.ApartmentEntry.CONTENT_URI;
+        Log.d(LOG_TAG, "Loader created with uri " + AptUri);
+
+        String [] projection = {AptContract.ApartmentEntry.COLUMN_NAME,
+        AptContract.ApartmentEntry.COLUMN_LATITUDE,
+        AptContract.ApartmentEntry.COLUMN_LONGITUDE};
+
+        return new CursorLoader(context,
+                AptUri,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //TODO
+        int col_name = data.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NAME);
+        int col_lat = data.getColumnIndex(AptContract.ApartmentEntry.COLUMN_LATITUDE);
+        int col_long = data.getColumnIndex(AptContract.ApartmentEntry.COLUMN_LONGITUDE);
+        while (data.moveToNext()) {
+            String name = data.getString(col_name);
+            Float lat = Float.parseFloat(data.getString(col_lat));
+            Float lon = Float.parseFloat(data.getString(col_long));
+            Log.d(LOG_TAG, "Marker Name " + name
+            + "lat " + lat + "lon " + lon);
+            map.addMarker(new MarkerOptions()
+                    .position(new LatLng(lat, lon))
+                    .title(name));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
 }
