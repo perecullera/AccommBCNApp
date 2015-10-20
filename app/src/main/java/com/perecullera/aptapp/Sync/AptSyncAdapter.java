@@ -134,6 +134,7 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
                     neighborhood = aptJSON.getString(APTneigh);
                     district = aptJSON.getString(APTdistrict);
                     postal_code = aptJSON.getString(APTpostal_code);
+
                     cats = "accommodation"; //TODO fake categoryes
                     latitude = aptJSON.getString(APTlatitude);
                     longitude = aptJSON.getString(APTlongitude);
@@ -146,6 +147,8 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
                     aptValues.put(ApartmentEntry.COLUMN_NAME, name);
                     aptValues.put(ApartmentEntry.COLUMN_ID, id_2);
                     aptValues.put(ApartmentEntry.COLUMN_NEIGHBORHOOD, neighborhood);
+                    aptValues.put(ApartmentEntry.COLUMN_DISTRICT, district);
+                    aptValues.put(ApartmentEntry.COLUMN_POSTAL_CODE, postal_code);
                     aptValues.put(ApartmentEntry.COLUMN_ADDRESS, address);
                     aptValues.put(ApartmentEntry.COLUMN_LATITUDE,latitude);
                     aptValues.put(ApartmentEntry.COLUMN_LONGITUDE, longitude);

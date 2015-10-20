@@ -32,36 +32,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //cursor adapter
-        // The CursorAdapter will take data from our cursor and populate the ListView.
-
-      /*  mAptAdapter = new AptAdapter(this, null, 0);
-
-        getLoaderManager().initLoader(APARTMENT_LOADER, null, this);
-        //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) findViewById(R.id.listview_apartment);
-        listView.setAdapter(mAptAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null) {
-                    int apt_id = cursor.getInt(COL_APT_ID);
-                    Intent intent = new Intent(MainActivity.this, DetailActivity.class)
-                            .putExtra("id", apt_id);
-                    startActivity(intent);
-                }
-            }
-        });*/
-
-
-        /*//Dummy debug
-        DBHelper db = new DBHelper(this);
-        db.onUpgrade(db.getWritableDatabase(), 0, 0); //fake db version
-        AptSyncAdapter.syncImmediately(this);
-        */
         if (savedInstanceState == null) {
             Fragment newFragment = new AptList_Fragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();

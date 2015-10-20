@@ -24,7 +24,7 @@ public class AptList_Fragment extends Fragment implements android.app.LoaderMana
     private OnFragmentInteractionListener mListener;
     private AptAdapter mAptAdapter;
     private int APARTMENT_LOADER = 0;
-    private int COL_APT_ID = 0;
+    private int COL_APT_ID = 0; //todo put aptcontract column name
     Context context;
 
     @Override

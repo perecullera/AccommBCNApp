@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,11 +24,14 @@ public class Neigh_Fragment extends Fragment implements LoaderManager.LoaderCall
 
 
     private int NEIGH_LOADER = 0;
+    private int NEIGH_DETAIL_LOADER = 1;
 
     private static final String LOG_TAG = Neigh_Fragment.class.getSimpleName();
 
     Context context;
     private AptAdapter mAptAdapter;
+
+    Loader loader;
 
     public Neigh_Fragment() {
         // Required empty public constructor
@@ -57,12 +61,21 @@ public class Neigh_Fragment extends Fragment implements LoaderManager.LoaderCall
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 if (cursor != null) {
-                    int col_index = cursor.getColumnIndex(
-                            AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD);
-                    String neigh = cursor.getString(col_index);
-                    /*Intent intent = new Intent(getActivity(), DetailActivity.class)
-                            .putExtra("neigh", neigh);
-                    startActivity(intent);*/
+                    if(loader.getId() == NEIGH_LOADER){
+                        int col_index = cursor.getColumnIndex(
+                                AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD);
+                        String neigh = cursor.getString(col_index);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("neigh", neigh);
+                        getLoaderManager().initLoader(NEIGH_DETAIL_LOADER, bundle, Neigh_Fragment.this);
+                    }else if (loader.getId() == NEIGH_DETAIL_LOADER) {
+                        int col_index = cursor.getColumnIndex(
+                                AptContract.ApartmentEntry.COLUMN__ID);
+                        int apt_id = cursor.getInt(col_index);
+                        Intent intent = new Intent(getActivity(), DetailActivity.class)
+                                .putExtra("id", apt_id);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -85,22 +98,35 @@ public class Neigh_Fragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri AptUri = Uri.parse(AptContract.BASE_CONTENT_URI+"/neighborhood");
-        Log.d(LOG_TAG, "Loader created with uri " + AptUri);
+        Uri AptUri = null;
+        String [] projection = null;
+        String selection = null;
+        String [] selectionArgs = null;
+        if (id == NEIGH_LOADER) {
+            AptUri = Uri.parse(AptContract.BASE_CONTENT_URI + "/neighborhood");
+            projection = new String[]{AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD};
 
-        String [] projection = {AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD};
+        } else if (id == NEIGH_DETAIL_LOADER) {
+            String neigh = args.getString("neigh");
+            AptUri = Uri.parse(AptContract.BASE_CONTENT_URI + "/neighborhood"+"/" + neigh);
+            selection = AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD + "=?";
+            selectionArgs = new String[]{neigh};
+        }
+
+        Log.d(LOG_TAG, "Loader created with uri " + AptUri);
 
         return new CursorLoader(context,
                 AptUri,
-                null,
-                null,
-                null,
+                projection,
+                selection,
+                selectionArgs,
                 null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAptAdapter.changeCursor(data);
+        this.loader = loader;
     }
 
     @Override

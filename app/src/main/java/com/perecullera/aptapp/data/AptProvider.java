@@ -24,6 +24,7 @@ public class AptProvider extends ContentProvider {
     private static final int APARTMENT_DETAIL = 101;
     private static final int APARTMENTS_WITH_LOCATION = 102;
     private static final int NEIGHBORHOOD = 103;
+    private static final int NEIGHBORHOOD_DETAIL = 104;
     /* private static final int LOCATION = 300;
     private static final int LOCATION_ID = 301;
     */
@@ -33,10 +34,11 @@ public class AptProvider extends ContentProvider {
        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
        final String authority = AptContract.CONTENT_AUTHORITY;
 
-       matcher.addURI(authority, AptContract.PATH_AP, APARTMENT);
-       matcher.addURI(authority, AptContract.PATH_AP + "/*", APARTMENT_DETAIL);
-       //matcher.addURI(authority, AptContract.PATH_AP, APARTMENTS_WITH_LOCATION);
-       matcher.addURI(authority, AptContract.PATH_NEIGH, NEIGHBORHOOD);
+        matcher.addURI(authority, AptContract.PATH_AP, APARTMENT);
+        matcher.addURI(authority, AptContract.PATH_AP + "/*", APARTMENT_DETAIL);
+        //matcher.addURI(authority, AptContract.PATH_AP, APARTMENTS_WITH_LOCATION);
+        matcher.addURI(authority, AptContract.PATH_NEIGH, NEIGHBORHOOD);
+        matcher.addURI(authority, AptContract.PATH_NEIGH + "/*", NEIGHBORHOOD_DETAIL);
 
        return matcher;
    }
@@ -65,8 +67,17 @@ public class AptProvider extends ContentProvider {
                 );
                 break;
 
-            case APARTMENTS_WITH_LOCATION:
-
+            case NEIGHBORHOOD_DETAIL:
+                retCursor = mDBHelper.getReadableDatabase().query(
+                        AptContract.ApartmentEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
 
             case NEIGHBORHOOD:
                 String [] columns = { AptContract.ApartmentEntry.COLUMN__ID,
