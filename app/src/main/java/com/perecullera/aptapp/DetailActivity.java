@@ -20,18 +20,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.perecullera.aptapp.data.AptContract;
 
 public class DetailActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int APARTMENT_LOADER = 0;
-    private static final int COL_APT_NAME = 2;
+    private static final String COL_APT_NAME = AptContract.ApartmentEntry.COLUMN_NAME;
+    private static final String COL_APT_ADD = AptContract.ApartmentEntry.COLUMN_ADDRESS;
+    private static final String COL_APT_CODE = AptContract.ApartmentEntry.COLUMN_POSTAL_CODE;
+    private static final String COL_APT_DIST = AptContract.ApartmentEntry.COLUMN_DISTRICT;
+    private static final String COL_APT_NEIGH = AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD;
+    private static final String COL_APT_LAT = AptContract.ApartmentEntry.COLUMN_LATITUDE;
+    private static final String COL_APT_LONG = AptContract.ApartmentEntry.COLUMN_LONGITUDE;
+
+
     int apt_id;
 
-    TextView mTextView;
+    TextView nameTv;
+    TextView addressTv;
+    TextView p_codeTv;
+    TextView neighTV;
+    TextView districtTV;
 
     public final String LOG_TAG = DetailActivity.class.getSimpleName();
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +58,16 @@ public class DetailActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mTextView = (TextView) findViewById(R.id.detail_text_view);
+        nameTv = (TextView) findViewById(R.id.detail_text_view);
+        addressTv = (TextView) findViewById(R.id.adress_textview);
+        p_codeTv = (TextView) findViewById(R.id.p_code_textview);
+        neighTV = (TextView) findViewById(R.id.neigh_textview);
+        districtTV = (TextView) findViewById(R.id.district_textview);
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.location_map))
+                .getMap();
+
+
         apt_id = getIntent().getIntExtra("id", 0);
         Log.d(LOG_TAG, "Extra id =  " + apt_id );
 
@@ -140,9 +167,29 @@ public class DetailActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(LOG_TAG, "Loader returns cursor: " + data.getCount());
         if (data != null && data.moveToFirst()) {
-            String text = data.getString(COL_APT_NAME);
-            Log.d(LOG_TAG, "Loader set text to " + text);
-            mTextView.setText(text);
+
+            String name = data.getString(data.getColumnIndex(COL_APT_NAME));
+            String address = data.getString(data.getColumnIndex(COL_APT_ADD));
+            String p_code = data.getString(data.getColumnIndex(COL_APT_CODE));
+            String neigh = data.getString(data.getColumnIndex(COL_APT_NEIGH));
+            String district = data.getString(data.getColumnIndex(COL_APT_DIST));
+            Float latitude = Float.parseFloat(data.getString(data.getColumnIndex(COL_APT_LAT)));
+            Float longitude = Float.parseFloat(data.getString(data.getColumnIndex(COL_APT_LONG)));
+
+            Log.d(LOG_TAG, "Loader set text to " + name);
+            nameTv.setText(name);
+            addressTv.setText(address);
+            p_codeTv.setText(p_code);
+            neighTV.setText(neigh);
+            districtTV.setText(district);
+
+            map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+            LatLng latLong = new LatLng(latitude, longitude);
+            map.addMarker(new MarkerOptions()
+                .title(name)
+                .position(latLong));
+
         }
     }
 
