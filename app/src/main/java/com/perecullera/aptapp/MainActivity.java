@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_neigh) {
-            // Handle the camera action
+
             Neigh_Fragment neighFrag = new Neigh_Fragment();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -122,6 +122,17 @@ public class MainActivity extends AppCompatActivity
             // Commit the transaction
             transaction.commit();
         } else if (id == R.id.nav_district) {
+
+            District_Fragment neighFrag = new District_Fragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack
+            transaction.replace(R.id.fragment_container, neighFrag);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
 
         } else if (id == R.id.nav_search) {
 

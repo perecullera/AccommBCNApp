@@ -30,11 +30,21 @@ public class AptAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        int id_index = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_ID);
+        int name_index = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NAME);
+        int neigh_index = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD);
+        int district_index = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_DISTRICT);
         TextView tv = (TextView) view;
-        if(cursor.isNull(id_index)){
-            int i = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD);
-            tv.setText(cursor.getString(i));
+        //if cursor brings the name is for apt list
+        if(!cursor.isNull(name_index)){
+            tv.setText(cursor.getString(name_index));
+
+        //otherwise, is for district list
+        }else if (!cursor.isNull(district_index)){
+            tv.setText(cursor.getString(district_index));
+
+        //or neighborhood list
+        }else if (!cursor.isNull(neigh_index)){
+            tv.setText(cursor.getString(neigh_index));
         }else {
             int i = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NAME);
             tv.setText(cursor.getString(i));

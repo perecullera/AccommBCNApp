@@ -25,6 +25,8 @@ public class AptProvider extends ContentProvider {
     private static final int APARTMENTS_WITH_LOCATION = 102;
     private static final int NEIGHBORHOOD = 103;
     private static final int NEIGHBORHOOD_DETAIL = 104;
+    private static final int DISTRICT = 105;
+    private static final int DISTRICT_DETAIL = 106;
     /* private static final int LOCATION = 300;
     private static final int LOCATION_ID = 301;
     */
@@ -39,7 +41,8 @@ public class AptProvider extends ContentProvider {
         //matcher.addURI(authority, AptContract.PATH_AP, APARTMENTS_WITH_LOCATION);
         matcher.addURI(authority, AptContract.PATH_NEIGH, NEIGHBORHOOD);
         matcher.addURI(authority, AptContract.PATH_NEIGH + "/*", NEIGHBORHOOD_DETAIL);
-
+        matcher.addURI(authority, AptContract.PATH_DISTRICT, DISTRICT);
+        matcher.addURI(authority, AptContract.PATH_DISTRICT + "/*", DISTRICT_DETAIL);
        return matcher;
    }
 
@@ -92,6 +95,33 @@ public class AptProvider extends ContentProvider {
                         null,
                         null,
                         null
+                );
+                break;
+
+            case DISTRICT:
+                String [] colDIST = { AptContract.ApartmentEntry.COLUMN__ID,
+                        AptContract.ApartmentEntry.COLUMN_DISTRICT};
+                retCursor = mDBHelper.getReadableDatabase().query(
+                        true,
+                        AptContract.ApartmentEntry.TABLE_NAME,
+                        colDIST,
+                        selection,
+                        selectionArgs,
+                        AptContract.ApartmentEntry.COLUMN_DISTRICT,
+                        null,
+                        null,
+                        null
+                );
+                break;
+            case DISTRICT_DETAIL:
+                retCursor = mDBHelper.getReadableDatabase().query(
+                        AptContract.ApartmentEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
                 );
                 break;
 
