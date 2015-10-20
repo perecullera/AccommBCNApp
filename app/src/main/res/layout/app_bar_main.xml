@@ -15,7 +15,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <fragment android:name="com.perecullera.aptapp.AptList_Fragment"
+    <FrameLayout android:name="com.perecullera.aptapp.AptList_Fragment"
         android:id="@+id/fragment_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

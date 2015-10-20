@@ -1,5 +1,6 @@
 package com.perecullera.aptapp;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -60,7 +61,12 @@ public class MainActivity extends AppCompatActivity
         DBHelper db = new DBHelper(this);
         db.onUpgrade(db.getWritableDatabase(), 0, 0); //fake db version
         AptSyncAdapter.syncImmediately(this);
-*/
+        */
+        if (savedInstanceState == null) {
+            Fragment newFragment = new AptList_Fragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(R.id.fragment_container, newFragment).commit();
+        }
         AptList_Fragment forecastFragment =  (AptList_Fragment)getFragmentManager()
                 .findFragmentById(R.id.fragment_container);
 
