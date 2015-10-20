@@ -15,6 +15,7 @@ public class AptContract {
 
     public static final String PATH_AP = "apartment";
     public static final String PATH_CAT = "category";
+    public static final String PATH_NEIGH = "neighborhood";
 
     /* Inner class that defines the table contents of the apartment table */
     public static final class ApartmentEntry implements BaseColumns {
@@ -31,6 +32,7 @@ public class AptContract {
         public static final String TABLE_NAME = "apartments";
 
         //columns
+        public static final String COLUMN__ID = "_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_NEIGHBORHOOD = "neighborhood";

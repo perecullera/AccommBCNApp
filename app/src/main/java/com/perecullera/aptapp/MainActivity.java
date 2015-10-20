@@ -133,13 +133,23 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
+        if (id == R.id.nav_neigh) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            Neigh_Fragment neighFrag = new Neigh_Fragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        } else if (id == R.id.nav_slideshow) {
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack
+            transaction.replace(R.id.fragment_container, neighFrag);
+            transaction.addToBackStack(null);
 
-        } else if (id == R.id.nav_manage) {
+            // Commit the transaction
+            transaction.commit();
+        } else if (id == R.id.nav_district) {
+
+        } else if (id == R.id.nav_search) {
+
+        } else if (id == R.id.nav_cats) {
 
         } else if (id == R.id.nav_share) {
 

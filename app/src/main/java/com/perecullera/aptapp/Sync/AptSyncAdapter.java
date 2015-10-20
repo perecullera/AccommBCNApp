@@ -43,7 +43,7 @@ public class AptSyncAdapter extends AbstractThreadedSyncAdapter {
     
     // Interval at which to sync with the weather, in milliseconds.
     // 1000 milliseconds (1 second) * 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 3;
+    public static final int SYNC_INTERVAL = 60 * 320;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
     public AptSyncAdapter(Context context, boolean autoInitialize) {

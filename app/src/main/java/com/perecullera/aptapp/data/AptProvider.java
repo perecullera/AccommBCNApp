@@ -17,11 +17,13 @@ public class AptProvider extends ContentProvider {
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
+
     private DBHelper mDBHelper;
 
     private static final int APARTMENT = 100;
     private static final int APARTMENT_DETAIL = 101;
     private static final int APARTMENTS_WITH_LOCATION = 102;
+    private static final int NEIGHBORHOOD = 103;
     /* private static final int LOCATION = 300;
     private static final int LOCATION_ID = 301;
     */
@@ -33,7 +35,8 @@ public class AptProvider extends ContentProvider {
 
        matcher.addURI(authority, AptContract.PATH_AP, APARTMENT);
        matcher.addURI(authority, AptContract.PATH_AP + "/*", APARTMENT_DETAIL);
-       matcher.addURI(authority, AptContract.PATH_AP, APARTMENTS_WITH_LOCATION);
+       //matcher.addURI(authority, AptContract.PATH_AP, APARTMENTS_WITH_LOCATION);
+       matcher.addURI(authority, AptContract.PATH_NEIGH, NEIGHBORHOOD);
 
        return matcher;
    }
@@ -48,15 +51,47 @@ public class AptProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
-        retCursor = mDBHelper.getReadableDatabase().query(
-                AptContract.ApartmentEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder
-        );
+        int match = sUriMatcher.match(uri);
+        switch (match){
+            case APARTMENT:
+                retCursor = mDBHelper.getReadableDatabase().query(
+                        AptContract.ApartmentEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+
+            case APARTMENTS_WITH_LOCATION:
+
+
+            case NEIGHBORHOOD:
+                String [] columns = { AptContract.ApartmentEntry.COLUMN__ID,
+                        AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD};
+                retCursor = mDBHelper.getReadableDatabase().query(
+                        true,
+                        AptContract.ApartmentEntry.TABLE_NAME,
+                        columns,
+                        selection,
+                        selectionArgs,
+                        AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD,
+                        null,
+                        null,
+                        null
+                );
+                break;
+
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         Log.d("APTProvider", "Loader returns cursor: " + retCursor.getCount());
         return retCursor;
     }
@@ -64,7 +99,19 @@ public class AptProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
-      return AptContract.ApartmentEntry.CONTENT_TYPE;
+
+        // Use the Uri Matcher to determine what kind of URI this is.
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case APARTMENT:{
+                return AptContract.ApartmentEntry.CONTENT_TYPE;
+            }
+            case NEIGHBORHOOD:{
+                return AptContract.ApartmentEntry.CONTENT_TYPE+"/neighborhood";
+            }
+        }
+        return null;
     }
 
     @Nullable

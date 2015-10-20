@@ -21,6 +21,8 @@ public class AptAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+
+
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_apartment, parent, false);
 
         return view;
@@ -28,8 +30,14 @@ public class AptAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView tv = (TextView)view;
-        int i = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NAME);
-        tv.setText(cursor.getString(i));
+        int id_index = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_ID);
+        TextView tv = (TextView) view;
+        if(cursor.isNull(id_index)){
+            int i = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NEIGHBORHOOD);
+            tv.setText(cursor.getString(i));
+        }else {
+            int i = cursor.getColumnIndex(AptContract.ApartmentEntry.COLUMN_NAME);
+            tv.setText(cursor.getString(i));
+        }
     }
 }
